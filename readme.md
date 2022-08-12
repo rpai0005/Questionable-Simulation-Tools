@@ -41,4 +41,4 @@ To run the Jupyter notebook, use the command:
 	
 	python3 -m notebook
 
-and select `frontend_prototype.ipnyb` from the file list. It requires both `Election_Simulation.py` and `lazy_backend.py` in order to run. It will both setup and audit and election, so it requires all the files from "Set up an election audit." We also provide a mybinder, which can be found here (insert link).
+and select `frontend_prototype.ipnyb` from the file list. It requires both `Election_Simulation.py` and `lazy_backend.py` in order to run. It will both setup and audit and election, so it requires all the files from "Set up an election audit." We also have a mybinder, which turns Git repos into interactable environments. It can be found [here](https://mybinder.org/v2/git/https%3A%2F%2Fgithub.com%2Faeharrison815%2FLazy-RLA-Too[…]3e34a8c3a35a0989?urlpath=lab%2Ftree%2Ffrontend_prototype.ipynb).

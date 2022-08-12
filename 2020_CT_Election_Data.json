@@ -1,0 +1,847 @@
+[
+ {
+   "Town": "Andover",
+   "Voter Population": 2406,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Ansonia",
+   "Voter Population": 10744,
+   "Polling Places": "7"
+ },
+ {
+   "Town": "Ashford",
+   "Voter Population": 2982,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Avon",
+   "Voter Population": 14148,
+   "Polling Places": "3"
+ },
+ {
+   "Town": "Barkhamsted",
+   "Voter Population": 2983,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Beacon Falls",
+   "Voter Population": 4500,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Berlin",
+   "Voter Population": 15341,
+   "Polling Places": "5"
+ },
+ {
+   "Town": "Bethany",
+   "Voter Population": 4201,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Bethel",
+   "Voter Population": 13238,
+   "Polling Places": "5"
+ },
+ {
+   "Town": "Bethlehem",
+   "Voter Population": 2886,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Bloomfield",
+   "Voter Population": 15765,
+   "Polling Places": "5"
+ },
+ {
+   "Town": "Bolton",
+   "Voter Population": 3720,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Bozrah",
+   "Voter Population": 1923,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Branford",
+   "Voter Population": 22046,
+   "Polling Places": "7"
+ },
+ {
+   "Town": "Bridgeport",
+   "Voter Population": 77560,
+   "Polling Places": "25"
+ },
+ {
+   "Town": "Bridgewater",
+   "Voter Population": 1422,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Bristol",
+   "Voter Population": 37247,
+   "Polling Places": "9"
+ },
+ {
+   "Town": "Brookfield",
+   "Voter Population": 13053,
+   "Polling Places": "2"
+ },
+ {
+   "Town": "Brooklyn",
+   "Voter Population": 5280,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Burlington",
+   "Voter Population": 6778,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Canaan",
+   "Voter Population": 755,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Canterbury",
+   "Voter Population": 3724,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Canton",
+   "Voter Population": 7885,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Chaplin",
+   "Voter Population": 1578,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Cheshire",
+   "Voter Population": 20561,
+   "Polling Places": "7"
+ },
+ {
+   "Town": "Chester",
+   "Voter Population": 2930,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Clinton",
+   "Voter Population": 10493,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Colchester",
+   "Voter Population": 10946,
+   "Polling Places": "4"
+ },
+ {
+   "Town": "Colebrook",
+   "Voter Population": 1107,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Columbia",
+   "Voter Population": 4121,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Cornwall",
+   "Voter Population": 1176,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Coventry",
+   "Voter Population": 9282,
+   "Polling Places": "2"
+ },
+ {
+   "Town": "Cromwell",
+   "Voter Population": 10885,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Danbury",
+   "Voter Population": 44476,
+   "Polling Places": "19"
+ },
+ {
+   "Town": "Darien",
+   "Voter Population": 15106,
+   "Polling Places": "7"
+ },
+ {
+   "Town": "Deep River",
+   "Voter Population": 3453,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Derby",
+   "Voter Population": 7094,
+   "Polling Places": "3"
+ },
+ {
+   "Town": "Durham",
+   "Voter Population": 5489,
+   "Polling Places": "3"
+ },
+ {
+   "Town": "Eastford",
+   "Voter Population": 1303,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "East Granby",
+   "Voter Population": 3931,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "East Haddam",
+   "Voter Population": 7086,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "East Hampton",
+   "Voter Population": 9308,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "East Hartford",
+   "Voter Population": 31707,
+   "Polling Places": "7"
+ },
+ {
+   "Town": "East Haven",
+   "Voter Population": 19112,
+   "Polling Places": "8"
+ },
+ {
+   "Town": "East Lyme",
+   "Voter Population": 13672,
+   "Polling Places": "4"
+ },
+ {
+   "Town": "Easton",
+   "Voter Population": 5787,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "East Windsor",
+   "Voter Population": 8803,
+   "Polling Places": "3"
+ },
+ {
+   "Town": "Ellington",
+   "Voter Population": 11198,
+   "Polling Places": "2"
+ },
+ {
+   "Town": "Enfield",
+   "Voter Population": 26390,
+   "Polling Places": "7"
+ },
+ {
+   "Town": "Essex",
+   "Voter Population": 5627,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Fairfield",
+   "Voter Population": 42083,
+   "Polling Places": "11"
+ },
+ {
+   "Town": "Farmington",
+   "Voter Population": 20408,
+   "Polling Places": "7"
+ },
+ {
+   "Town": "Franklin",
+   "Voter Population": 1421,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Glastonbury",
+   "Voter Population": 25484,
+   "Polling Places": "7"
+ },
+ {
+   "Town": "Goshen",
+   "Voter Population": 2376,
+   "Polling Places": "2"
+ },
+ {
+   "Town": "Granby",
+   "Voter Population": 8366,
+   "Polling Places": "2"
+ },
+ {
+   "Town": "Greenwich",
+   "Voter Population": 42359,
+   "Polling Places": "19"
+ },
+ {
+   "Town": "Griswold",
+   "Voter Population": 8068,
+   "Polling Places": "6"
+ },
+ {
+   "Town": "Groton",
+   "Voter Population": 21277,
+   "Polling Places": "7"
+ },
+ {
+   "Town": "Guilford",
+   "Voter Population": 16706,
+   "Polling Places": "5"
+ },
+ {
+   "Town": "Haddam",
+   "Voter Population": 6438,
+   "Polling Places": "3"
+ },
+ {
+   "Town": "Hamden",
+   "Voter Population": 36215,
+   "Polling Places": "13"
+ },
+ {
+   "Town": "Hampton",
+   "Voter Population": 1336,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Hartford",
+   "Voter Population": 65376,
+   "Polling Places": "24"
+ },
+ {
+   "Town": "Hartland",
+   "Voter Population": 1509,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Harwinton",
+   "Voter Population": 4301,
+   "Polling Places": "2"
+ },
+ {
+   "Town": "Hebron",
+   "Voter Population": 7685,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Kent",
+   "Voter Population": 2116,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Killingly",
+   "Voter Population": 11462,
+   "Polling Places": "5"
+ },
+ {
+   "Town": "Killingworth",
+   "Voter Population": 5044,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Lebanon",
+   "Voter Population": 5104,
+   "Polling Places": "2"
+ },
+ {
+   "Town": "Ledyard",
+   "Voter Population": 9945,
+   "Polling Places": "3"
+ },
+ {
+   "Town": "Lisbon",
+   "Voter Population": 2877,
+   "Polling Places": "2"
+ },
+ {
+   "Town": "Litchfield",
+   "Voter Population": 6246,
+   "Polling Places": "4"
+ },
+ {
+   "Town": "Lyme",
+   "Voter Population": 2012,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Madison",
+   "Voter Population": 14170,
+   "Polling Places": "2"
+ },
+ {
+   "Town": "Manchester",
+   "Voter Population": 34944,
+   "Polling Places": "9"
+ },
+ {
+   "Town": "Mansfield",
+   "Voter Population": 10103,
+   "Polling Places": "4"
+ },
+ {
+   "Town": "Marlborough",
+   "Voter Population": 4684,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Meriden",
+   "Voter Population": 32161,
+   "Polling Places": "13"
+ },
+ {
+   "Town": "Middlebury",
+   "Voter Population": 6118,
+   "Polling Places": "2"
+ },
+ {
+   "Town": "Middlefield",
+   "Voter Population": 3443,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Middletown",
+   "Voter Population": 30301,
+   "Polling Places": "14"
+ },
+ {
+   "Town": "Milford",
+   "Voter Population": 40188,
+   "Polling Places": "9"
+ },
+ {
+   "Town": "Monroe",
+   "Voter Population": 14017,
+   "Polling Places": "4"
+ },
+ {
+   "Town": "Montville",
+   "Voter Population": 11002,
+   "Polling Places": "6"
+ },
+ {
+   "Town": "Morris",
+   "Voter Population": 1822,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Naugatuck",
+   "Voter Population": 20608,
+   "Polling Places": "9"
+ },
+ {
+   "Town": "New Britain",
+   "Voter Population": 34307,
+   "Polling Places": "17"
+ },
+ {
+   "Town": "New Canaan",
+   "Voter Population": 14800,
+   "Polling Places": "3"
+ },
+ {
+   "Town": "New Fairfield",
+   "Voter Population": 10508,
+   "Polling Places": "2"
+ },
+ {
+   "Town": "New Hartford",
+   "Voter Population": 5288,
+   "Polling Places": "2"
+ },
+ {
+   "Town": "New Haven",
+   "Voter Population": 63759,
+   "Polling Places": "40"
+ },
+ {
+   "Town": "Newington",
+   "Voter Population": 21120,
+   "Polling Places": "8"
+ },
+ {
+   "Town": "New London",
+   "Voter Population": 16996,
+   "Polling Places": "3"
+ },
+ {
+   "Town": "New Milford",
+   "Voter Population": 18647,
+   "Polling Places": "7"
+ },
+ {
+   "Town": "Newtown",
+   "Voter Population": 19412,
+   "Polling Places": "6"
+ },
+ {
+   "Town": "Norfolk",
+   "Voter Population": 1197,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "North Branford",
+   "Voter Population": 10272,
+   "Polling Places": "2"
+ },
+ {
+   "Town": "North Canaan",
+   "Voter Population": 2457,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "North Haven",
+   "Voter Population": 18320,
+   "Polling Places": "6"
+ },
+ {
+   "Town": "North Stonington",
+   "Voter Population": 4473,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Norwalk",
+   "Voter Population": 58976,
+   "Polling Places": "12"
+ },
+ {
+   "Town": "Norwich",
+   "Voter Population": 20525,
+   "Polling Places": "6"
+ },
+ {
+   "Town": "Old Lyme",
+   "Voter Population": 6183,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Old Saybrook",
+   "Voter Population": 9235,
+   "Polling Places": "2"
+ },
+ {
+   "Town": "Orange",
+   "Voter Population": 10743,
+   "Polling Places": "3"
+ },
+ {
+   "Town": "Oxford",
+   "Voter Population": 9800,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Plainfield",
+   "Voter Population": 10780,
+   "Polling Places": "5"
+ },
+ {
+   "Town": "Plainville",
+   "Voter Population": 12462,
+   "Polling Places": "4"
+ },
+ {
+   "Town": "Plymouth",
+   "Voter Population": 8722,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Pomfret",
+   "Voter Population": 2938,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Portland",
+   "Voter Population": 6864,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Preston",
+   "Voter Population": 3345,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Prospect",
+   "Voter Population": 6913,
+   "Polling Places": "2"
+ },
+ {
+   "Town": "Putnam",
+   "Voter Population": 6292,
+   "Polling Places": "2"
+ },
+ {
+   "Town": "Redding",
+   "Voter Population": 7129,
+   "Polling Places": "4"
+ },
+ {
+   "Town": "Ridgefield",
+   "Voter Population": 19653,
+   "Polling Places": "4"
+ },
+ {
+   "Town": "Rocky Hill",
+   "Voter Population": 13260,
+   "Polling Places": "3"
+ },
+ {
+   "Town": "Roxbury",
+   "Voter Population": 1852,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Salem",
+   "Voter Population": 2977,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Salisbury",
+   "Voter Population": 2972,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Scotland",
+   "Voter Population": 1227,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Seymour",
+   "Voter Population": 11681,
+   "Polling Places": "3"
+ },
+ {
+   "Town": "Sharon",
+   "Voter Population": 1815,
+   "Polling Places": "2"
+ },
+ {
+   "Town": "Shelton",
+   "Voter Population": 28617,
+   "Polling Places": "5"
+ },
+ {
+   "Town": "Sherman",
+   "Voter Population": 2849,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Simsbury",
+   "Voter Population": 19321,
+   "Polling Places": "4"
+ },
+ {
+   "Town": "Somers",
+   "Voter Population": 6573,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Southbury",
+   "Voter Population": 15945,
+   "Polling Places": "3"
+ },
+ {
+   "Town": "Southington",
+   "Voter Population": 31419,
+   "Polling Places": "11"
+ },
+ {
+   "Town": "South Windsor",
+   "Voter Population": 17789,
+   "Polling Places": "6"
+ },
+ {
+   "Town": "Sprague",
+   "Voter Population": 1956,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Stafford",
+   "Voter Population": 7561,
+   "Polling Places": "3"
+ },
+ {
+   "Town": "Stamford",
+   "Voter Population": 75560,
+   "Polling Places": "23"
+ },
+ {
+   "Town": "Sterling",
+   "Voter Population": 2700,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Stonington",
+   "Voter Population": 14503,
+   "Polling Places": "5"
+ },
+ {
+   "Town": "Stratford",
+   "Voter Population": 38374,
+   "Polling Places": "19"
+ },
+ {
+   "Town": "Suffield",
+   "Voter Population": 10053,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Thomaston",
+   "Voter Population": 5181,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Thompson",
+   "Voter Population": 6717,
+   "Polling Places": "4"
+ },
+ {
+   "Town": "Tolland",
+   "Voter Population": 10968,
+   "Polling Places": "3"
+ },
+ {
+   "Town": "Torrington",
+   "Voter Population": 22295,
+   "Polling Places": "8"
+ },
+ {
+   "Town": "Trumbull",
+   "Voter Population": 28200,
+   "Polling Places": "5"
+ },
+ {
+   "Town": "Union",
+   "Voter Population": 673,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Vernon",
+   "Voter Population": 18608,
+   "Polling Places": "4"
+ },
+ {
+   "Town": "Voluntown",
+   "Voter Population": 1788,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Wallingford",
+   "Voter Population": 29923,
+   "Polling Places": "9"
+ },
+ {
+   "Town": "Warren",
+   "Voter Population": 1125,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Washington",
+   "Voter Population": 2633,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Waterbury",
+   "Voter Population": 56881,
+   "Polling Places": "21"
+ },
+ {
+   "Town": "Waterford",
+   "Voter Population": 14295,
+   "Polling Places": "4"
+ },
+ {
+   "Town": "Watertown",
+   "Voter Population": 15199,
+   "Polling Places": "4"
+ },
+ {
+   "Town": "Westbrook",
+   "Voter Population": 4995,
+   "Polling Places": "2"
+ },
+ {
+   "Town": "West Hartford",
+   "Voter Population": 42881,
+   "Polling Places": "9"
+ },
+ {
+   "Town": "West Haven",
+   "Voter Population": 29674,
+   "Polling Places": "10"
+ },
+ {
+   "Town": "Weston",
+   "Voter Population": 7697,
+   "Polling Places": "2"
+ },
+ {
+   "Town": "Westport",
+   "Voter Population": 20617,
+   "Polling Places": "7"
+ },
+ {
+   "Town": "Wethersfield",
+   "Voter Population": 19078,
+   "Polling Places": "6"
+ },
+ {
+   "Town": "Willington",
+   "Voter Population": 3738,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Wilton",
+   "Voter Population": 13521,
+   "Polling Places": "4"
+ },
+ {
+   "Town": "Winchester",
+   "Voter Population": 6558,
+   "Polling Places": "1"
+ },
+ {
+   "Town": "Windham",
+   "Voter Population": 12976,
+   "Polling Places": "5"
+ },
+ {
+   "Town": "Windsor",
+   "Voter Population": 22004,
+   "Polling Places": "7"
+ },
+ {
+   "Town": "Windsor Locks",
+   "Voter Population": 8727,
+   "Polling Places": "2"
+ },
+ {
+   "Town": "Wolcott",
+   "Voter Population": 12632,
+   "Polling Places": "3"
+ },
+ {
+   "Town": "Woodbridge",
+   "Voter Population": 6731,
+   "Polling Places": "2"
+ },
+ {
+   "Town": "Woodbury",
+   "Voter Population": 8157,
+   "Polling Places": "2"
+ },
+ {
+   "Town": "Woodstock",
+   "Voter Population": 6404,
+   "Polling Places": "1"
+ }
+]

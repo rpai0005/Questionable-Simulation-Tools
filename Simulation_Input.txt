@@ -1,0 +1,9 @@
+Ballots=10000
+Overvotes1=0
+Undervotes1=0
+Overvotes2=0
+Undervotes2=0
+Risk Limit=0.05
+Simulations per margin=1
+Gamma=1.1
+Margin=5

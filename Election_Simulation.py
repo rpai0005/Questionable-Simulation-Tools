@@ -21,10 +21,9 @@ import random
 import json
 import os.path
 import sys
-import math
-from math import ceil 
+from math import log, ceil 
 import csv
-from lazy_backend import *
+from adaptive_backend import *
 
 
 class Ballot(object):
@@ -40,7 +39,7 @@ class Ballot(object):
         
         
 class Election(object):
-    def __init__(self, numBallots, margin, o1, u1, o2, u2, riskLimit, gamma, jsonFile = None, minBallots = 1, maxBallots = 0):
+    def __init__(self, numBallots, margin, o1, u1, o2, u2, riskLimit = 0.05, gamma = 1.1, simulationType = 1, jsonFile = None):
         self.numBallots = numBallots
         self.margin = margin
         self.overvotes1 = o1
@@ -49,11 +48,7 @@ class Election(object):
         self.undervotes2 = u2
         self.riskLimit = riskLimit 
         self.gamma = gamma
-        self.minBallots = minBallots
-        if (maxBallots == 0):
-            self.maxBallots = numBallots
-        else:
-            self.maxBallots = maxBallots
+        self.simulationType = simulationType
             
         self.winnerBallots = self.runnerupBallots = 0 #Number of ballots the winner/runnerup receives; set with _marginOfVictory
         self.ballotList = {} #ID: ballot object; set with _distributeBallots
@@ -103,7 +98,7 @@ class Election(object):
         '''
         ballots = self.numBallots - self.overvotes1 - self.undervotes1 - self.overvotes2 - self.undervotes2 #Number of ballots with valid votes
         #Gives the winner margin% more votes than runner-up
-        ballotsInMargin = ballots/100 * float(self.margin)
+        ballotsInMargin = ballots * float(self.margin/100)
         self.winnerBallots = round(1/2 * (ballots + ballotsInMargin))
         self.runnerupBallots = round(1/2 * (ballots - ballotsInMargin))
            
@@ -169,6 +164,7 @@ class Election(object):
         '''
         #Selects random town then updates the distribution
         #TO DO: seed randomness
+        batchID = None
         ballotTown = random.choices(self.townList, weights = self.townPopulation, k = 1)
         ballotTown = ballotTown[0]
         townIndex = self.townList.index(ballotTown)
@@ -204,8 +200,37 @@ class Election(object):
                     lazyBallots[town][0] += 1
                     lazyBallots[town][1] += self.staticBatchSize[town][i + 1]
         return lazyBallots
+
+    def _pollingSample(self, numBallots = -1, winnerBallots = -1, runnerupBallots = -1):
+        '''
+        Summary: Uses BRAVO math to from https://www.stat.berkeley.edu/~stark/Vote/ballotPollTools.htm to create an initial sample size for
+        ballot polling audit 
+        Parameters: Number of ballots, number of winner ballots, and number of runnerup ballots
+        Returns: The initial sample size for a ballot polling audit
+        TO DO: Verify math for multiple rounds
+        '''
+        if (numBallots == -1):
+            numBallots = self.numBallots
+        if (winnerBallots == -1):
+            winnerBallots = self.winnerBallots
+        if (runnerupBallots == -1):
+            runnerupBallots = self.runnerupBallots
+        N = numBallots
+        Nwl = winnerBallots + runnerupBallots
+        pw = winnerBallots/Nwl
+        pl = runnerupBallots/Nwl
+        sw = pw/(pw + pl)
+
+        numer = np.log(1/self.riskLimit) + np.log(2 * sw)/2
+        denom = pw * np.log(2*sw) + pl * np.log(2 - 2 * sw)
+        ASN = (N/Nwl) * numer/denom
+
+        if (ASN > self.numBallots):
+            ASN = self.numBallots
+
+        return ceil(ASN)
     
-    def _ballotPolling(self):
+    def _ballotPolling(self, maxBallots = -1, minBallots = 1):
         '''
         Summary: Follows the steps to conduct a ballot polling audit utilizing the steps described in
         BRAVO: Ballot-polling Risk-limiting Audits to Verify Outcomes
@@ -217,7 +242,13 @@ class Election(object):
         if utilizing a minimum and maximum number of ballots; otherwise, the success rate will be 100 as the simulation continues the audit until 
         the risk limit is met)
         '''
+        if (maxBallots == -1):
+            maxBallots = self.numBallots
         numToAudit = 0
+        prvRound = 0 #Number of ballots examined in the previous rounds, if doing multiple rounds
+        winnerCounter = 0
+        runnerupCounter = 0
+        roundCounter = 0
         successTracker = 0 #100 when the risk limit is met, 0 otherwise
         T = 1 #Test statistic
         sw = self.winnerBallots/self.numBallots #Proportion of valid votes cast for winner
@@ -232,18 +263,79 @@ class Election(object):
             if (randomBallot.error == "normal"):
                 if (randomBallot.vote == "winner"):
                     T *= sw/.5
+                    winnerCounter += 1
                 else:
                     T *= (1 - sw)/.5
+                    runnerupCounter += 1
             #Returns when either the entered sample size is examined, the maximum number of ballots is examined, or the risk limit is met
-            if (self.minBallots == self.maxBallots and numToAudit == self.minBallots or numToAudit == self.maxBallots):
+            if (minBallots == maxBallots and numToAudit == minBallots or numToAudit == maxBallots):
                 if (T >= 1/self.riskLimit):
                     successTracker = 100
-                return numToAudit, successTracker
-            elif (T >= 1/self.riskLimit and numToAudit >= self.minBallots): 
+                    return numToAudit + prvRound, successTracker
+                if (self.simulationType == 1): #return audited number and % of times risk limit was met if doing incremental auditing
+                    return numToAudit + prvRound, successTracker
+                #If doing rounds, update maxBallots and start over
+                else: 
+                    prvRound += numToAudit
+                    roundCounter += 1
+                    if (roundCounter > 10):
+                        raise RuntimeError("Excessive Number of Rounds. Please run the simulation with less discrepancies.")
+                    numToAudit = 0
+                    if (winnerCounter >= runnerupCounter):
+                        #Note: using cumulative results from previous rounds
+                        #TO DO: Verify if correct method
+                        maxBallots = self._pollingSample(prvRound, winnerCounter, runnerupCounter)
+                    else:
+                        print("Audit found more votes for the runner-up candidate than reported winner. Please conduct a full-hand recount.")
+                        print("Force quitting ballot polling audit. Please note that simulation results are inaccurate.")
+                        return numToAudit + prvRound, successTracker
+                    print("Risk limit was not met for ballot polling audit, starting new round. New sample size =", maxBallots)
+            elif (T >= 1/self.riskLimit and numToAudit >= minBallots and self.simulationType == 1): 
                 successTracker = 100
-                return numToAudit, successTracker
+                return numToAudit + prvRound, successTracker
+
+    def _comparisonSample(self, overvotes1 = -1, undervotes1 = -1, overvotes2 = -1, undervotes2 = -1, numBallots = -1):
+        '''
+        Summary: Uses Kaplan-Markov sample sizes to create an initial sample size for ballot comparsion audit 
+        Parameters: Number of one- and two-vote over- and understatements, risk limit, and gamma
+        Returns: The initial sample size for a ballot comparison audit
+        '''
+        if (overvotes1 == -1):
+            overvotes1 = self.overvotes1
+        if (overvotes2 == -1):
+            overvotes2 = self.overvotes2
+        if (undervotes1 == -1):
+            undervotes1 = self.undervotes1
+        if (undervotes2 == -1):
+            undervotes2 = self.undervotes2
+        if (numBallots == -1):
+            numBallots = self.numBallots
+
+        margin = float(self.margin/100)
+        
+        #Overstatement/understatement rates
+        or1 = overvotes1/numBallots
+        ur1 = undervotes1/numBallots
+        or2 = overvotes2/numBallots
+        ur2 = undervotes2/numBallots
+
+        est = float('nan')
+
+        #Kaplan-Markov
+        denom = log( 1 - margin / (2 * self.gamma) ) -\
+                or1 * log(1 - 1 /(2 * self.gamma)) -\
+                or2 * log(1 - 1 / self.gamma) -\
+                ur1 * log(1 + 1 /(2 * self.gamma)) -\
+                ur2 * log(1 + 1 / self.gamma)
+
+        if (denom < 0):
+            est = ceil((log(self.riskLimit)/denom))
+        else:
+            raise ValueError("The number of overstatements show a change in the election winner. This results in an infinite sample size.")
+        
+        return est
             
-    def _ballotComparison(self):
+    def _ballotComparison(self, maxBallots = -1, minBallots = 1):
         '''
         Summary: Follows the steps to conduct a ballot comparison audit.
         TO DO: Add citation
@@ -252,12 +344,20 @@ class Election(object):
         if utilizing a minimum and maximum number of ballots; otherwise, the success rate will be 100 as the simulation continues the audit until 
         the risk limit is met)
         '''
+        if (maxBallots == -1):
+            maxBallots = self.numBallots
         dilutedMargin = (self.winnerBallots - self.runnerupBallots)/self.numBallots
         alpha = self.riskLimit
         numToAudit = 0
         observedrisk = 1
         successTracker = 0 #100 when the risk limit is met, 0 otherwise
         gamma = self.gamma
+        prvRound = 0 #Number of ballots examined in the previous rounds, if doing multiple rounds
+        o1Counter = 0
+        o2Counter = 0
+        u1Counter = 0
+        u2Counter = 0
+        roundCounter = 0
         #Checks if the initial batch of ballots is enough to audit; if not then add another ballot and keep checking
         while 1:
             numToAudit += 1
@@ -270,22 +370,37 @@ class Election(object):
             discCounter = 0
             if (randomBallot.error == "overvote"):
                 discCounter = discCounter + 1
+                o1Counter += 1
             elif (randomBallot.error == "overvote2"):
                 discCounter = discCounter + 2
+                o2Counter += 1
             elif (randomBallot.error == "undervote"):
                 discCounter = discCounter - 1
+                u1Counter += 1
             elif (randomBallot.error == "undervote2"):
                 discCounter = discCounter - 2
+                u2Counter += 1
             #Calculates the current risk limit
             observedrisk = observedrisk * (1-(dilutedMargin/(2*gamma)))/(1-(discCounter/(2*gamma)))
             #Returns when either the entered sample size is examined, the maximum number of ballots is examined, or the risk limit is met
-            if (self.minBallots == self.maxBallots and numToAudit == self.minBallots or numToAudit == self.maxBallots):
+            if (minBallots == maxBallots and numToAudit == minBallots or numToAudit == maxBallots):
                 if (observedrisk < alpha):
                     successTracker = 100
-                return numToAudit, successTracker
-            elif (observedrisk < alpha and numToAudit >= self.minBallots):
+                    return numToAudit + prvRound, successTracker
+                if (self.simulationType == 1): #return audited number and % of times risk limit was met if doing incremental auditing
+                    return numToAudit + prvRound, successTracker
+                #If doing rounds, update maxBallots and start over
+                else:
+                    prvRound += numToAudit
+                    roundCounter += 1
+                    if (roundCounter > 10):
+                        raise RuntimeError("Excessive Number of Rounds. Please run the simulation with less discrepancies.")
+                    maxBallots = self._comparisonSample(o1Counter, o2Counter, u1Counter, u2Counter, numToAudit)
+                    print("Risk limit was not met for ballot comparison audit, starting new round. New sample size =", maxBallots)
+                    numToAudit, o1Counter, o2Counter, u1Counter, u2Counter = 0, 0, 0, 0, 0
+            elif (observedrisk < alpha and numToAudit >= minBallots and self.simulationType == 1):
                 successTracker = 100
-                return numToAudit, successTracker
+                return numToAudit + prvRound, successTracker
             
     def _ballotsPerTown(self):
         '''
@@ -315,149 +430,6 @@ class Election(object):
         lazyBallots = self._getBatchNumbers()
         return self.numPollingPerTown, self.numComparisonPerTown, lazyBallots
 
-    def _createCVR1(self):
-        '''
-        Summary: Creates CVR and Manifest csv files for given Election object 
-        '''
-        #open csv file, write headers
-        electionCVR = open('electionCVR1.csv', mode = 'w', newline = '')
-        CVRwriter = csv.writer(electionCVR)
-        CVRwriter.writerow(['Test'])
-        CVRwriter.writerow(['','','','','','','','','Contest 1 (vote for = 1)','Contest 1 (vote for = 1)'])
-        CVRwriter.writerow(['','','','','','','','','Winner','Runner-Up'])
-        CVRwriter.writerow(['CVRNumber','TabulatorNumber', 'BatchID','RecordID', 'ImprintedID','CountingGroup','PrecinctPortion','BallotType','',''])
-
-        #run _marginOfVictory, _distributeBallots for election
-        self._marginOfVictory()   
-        self._distributeBallots()
-        
-        #generate list of random numbers to later assign to imprintedID for each ballot, create empty dict for recordID
-        imprintedID_list = random.sample(range(1, len(self.ballotList)+1), len(self.ballotList)) 
-        recordID_dict = {}
-        
-        #set values for .town, .batch for each ballot
-        for i in self.ballotList:
-            b = self.ballotList[i]
-            b.town, b.batch = self._setTownAndBatch("Comparison")
-            #create dictionary for recordID number
-            recordID_dict[b.town+str(b.batch)] = [0,0,0]  #key: b.town+b.batch, value: [total votes, winner votes, loser votes]
-
-        #write to csv file for each ballot in ballotList
-        for i in self.ballotList:
-            b = self.ballotList[i] 
-            recordID_dict[b.town+str(b.batch)][0] += 1 #update total count 
-            if b.vote == "winner":
-                CVRwriter.writerow([i+1,"TABULATOR1",b.town+str(b.batch),recordID_dict[b.town+str(b.batch)][0],"Test-"+str(b.batch)+'-'+str(imprintedID_list[i]),"Pilot",b.town,"BallotType",1,0])
-                recordID_dict[b.town+str(b.batch)][1] += 1 #update winner count
-            elif b.vote == "runnerup":
-                CVRwriter.writerow([i+1,"TABULATOR1",b.town+str(b.batch),recordID_dict[b.town+str(b.batch)][0],"Test-"+str(b.batch)+'-'+str(imprintedID_list[i]),"Pilot",b.town,"BallotType",0,1])
-                recordID_dict[b.town+str(b.batch)][2] += 1 #update loser count
-            elif b.vote == "overvote":
-                CVRwriter.writerow([i+1,"TABULATOR1",b.town+str(b.batch),recordID_dict[b.town+str(b.batch)][0],"Test-"+str(b.batch)+'-'+str(imprintedID_list[i]),"Pilot",b.town,"BallotType",1,1])
-            elif b.vote == "undervote":
-                CVRwriter.writerow([i+1,"TABULATOR1",b.town+str(b.batch),recordID_dict[b.town+str(b.batch)][0],"Test-"+str(b.batch)+'-'+str(imprintedID_list[i]),"Pilot",b.town,"BallotType",0,0])
-        print('CVR1 created')
-
-        #write to manifest csv file 
-        electionManifest = open('electionManifest.csv', mode = 'w', newline = '')
-        man_writer = csv.writer(electionManifest)
-        man_writer.writerow(['Container', 'Tabulator', 'Batch Name', 'Number of Ballots'])
-        for i in sorted(recordID_dict.keys()):
-            town = ''.join((x for x in i if not x.isdigit())) #remove digits to get town name 
-            man_writer.writerow(["Box 1", 'Tabulator 1', i, recordID_dict[i][0]])
-        print('Manifest created')
-
-        electionCVR.close()
-        electionManifest.close()
-
-    def _createCVR2(self, overvotes1, undervotes1, overvotes2, undervotes2):
-        '''
-        Alterations made for over/undervotes based on CVR1
-        CVR2 and tabulation files written 
-        '''
-
-        #write contents of file to lists to make changes
-        cvrList = []
-        with open('electionCVR1.csv', mode= 'r', newline = '') as readCVR:
-            cvrReader = csv.reader(readCVR)
-            for i in range(4):
-                next(cvrReader)
-            cvrList = list(cvrReader)
-            
-        o1 = overvotes1
-        u1 = undervotes1 
-        o2 = overvotes2 
-        u2 = undervotes2 
-
-        #create dictionary for recordID number, num total ballots, winner votes , runnerup votes per batch
-        recordID_dict = {}
-        for i in self.ballotList:
-            b = self.ballotList[i]
-            recordID_dict[b.town+str(b.batch)] = [0,0,0]  #key: b.town+b.batch, value: [total votes, winner votes, loser votes] 
-        
-        #change votes according to number of over/under1/2 votes
-        for row in cvrList: 
-            townBatch = row[2]
-            recordID_dict[townBatch][0] += 1
-            if row[8] == '1' and row[9] == '0': # winner vote
-                if u1 > 0: 
-                    #change vote to 0-0 
-                    row[8] = '0'
-                    row[9] = '0'
-                    u1 -= 1
-                elif u2 > 0:
-                    #change vote to 0-1
-                    row[8] = '0'
-                    row[9] = '1'
-                    recordID_dict[townBatch][2] += 1 #update loser count
-                    u2 -= 1
-                else: 
-                    recordID_dict[townBatch][1] += 1 #update winner count
-
-            elif row[8] == '0' and row[9] == '1': # runnerup vote 
-                if o1 > 0: 
-                    #change vote to 1-1
-                    row[8] = '1'
-                    row[9] = '1'
-                    recordID_dict[townBatch][1] += 1 #update winner count
-                    recordID_dict[townBatch][2] += 1 #update loser count
-                    o1 -= 1
-                elif o2 > 0:
-                    #change vote to 1-0
-                    row[8] = '1'
-                    row[9] = '0'
-                    recordID_dict[townBatch][1] += 1 #update winner count
-                    o2 -= 1
-                else: 
-                    recordID_dict[townBatch][2] += 1 #update runnerup count
-
-            elif row[8] == '1' and row[9] == '1': # overvote 
-                recordID_dict[townBatch][1] += 1 #update winner count
-                recordID_dict[townBatch][2] += 1 #update loser count
-
-        #write altered information to cvr2 file 
-        with open('electionCVR2.csv', mode='w', newline = '') as writeCVR:
-            cvrWriter = csv.writer(writeCVR)
-            #write headers 
-            cvrWriter.writerow(['Test'])
-            cvrWriter.writerow(['','','','','','','','','Contest 1 (vote for = 1)','Contest 1 (vote for = 1)'])
-            cvrWriter.writerow(['','','','','','','','','Winner','Runner-Up'])
-            cvrWriter.writerow(['CVRNumber','TabulatorNumber', 'BatchID','RecordID', 'ImprintedID','CountingGroup','PrecinctPortion','BallotType','',''])
-
-            cvrWriter.writerows(cvrList)
-
-        print('CVR2 created')
-
-        #write tabulation file
-        with open('electionTabulation.csv', mode = 'w', newline = '') as electionTabulation:
-            tab_writer = csv.writer(electionTabulation)
-            tab_writer.writerow(['Town', 'BatchNum', 'Size', 'Winner', 'Loser'])
-            for i in sorted(recordID_dict.keys()):
-                town = ''.join((x for x in i if not x.isdigit())) #remove digits to get town name 
-                tab_writer.writerow([town, i, recordID_dict[i][0], recordID_dict[i][1], recordID_dict[i][2]])
-
-        print('Tabulation created')
-
 
 def readInput():
     '''
@@ -473,7 +445,7 @@ def readInput():
     Margin=1                   #margin of victory, each new margin must be a new line (as shown)
     Margin=2
     ...                   
-    
+    TO DO: CHANGE FUNCTIONALITY, currently disabled
     Alternatively, the margin lines can be written as so: Margin=MOV, minimum number of ballots you wish to audit, maximum number of ballots you
     wish to audit. Ex:
     Margin=5, 20, 100
@@ -490,25 +462,25 @@ def readInput():
         print("Invalid Input Data: Please make sure the TXT file is in the directory!")
         return
     electionData = [] #List to read txt file into
-    dataValues = [] #List to hold the data values as the txt file is read
+    simulationData = [] #List to hold the data values as the txt file is read
     for i in range(8):
         electionData.append(f.readline())
         #Anything after = is read as a value
         for j in range(0, len(electionData[i])):
             if (electionData[i][j] == "="):
                 try:
-                    dataValues.append(float(electionData[i][(j + 1):]))
+                    simulationData.append(float(electionData[i][(j + 1):]))
                     break
                 except ValueError:
-                    dataValues.append(None)
-    numBallots = int(dataValues[0])
-    overvotes1 = int(dataValues[1])
-    undervotes1 = int(dataValues[2])
-    overvotes2 = int(dataValues[3])
-    undervotes2 = int(dataValues[4])
-    riskLimit = dataValues[5]
-    num = int(dataValues[6])
-    gamma = float(dataValues[7])
+                    simulationData.append(None)
+    numBallots = int(simulationData[0])
+    overvotes1 = int(simulationData[1])
+    undervotes1 = int(simulationData[2])
+    overvotes2 = int(simulationData[3])
+    undervotes2 = int(simulationData[4])
+    riskLimit = float(simulationData[5])
+    num = int(simulationData[6])
+    gamma = float(simulationData[7])
     margins = [] #0: margin, 1: minBallots, 2: maxBallots
     #Reads the margin lines into the margins list
     for line in f:
@@ -539,7 +511,18 @@ def readInput():
                 raise ValueError("The minimum number of ballots you wish to audit is larger than the maximum number of ballots.")
     #Close txt file and return the variables
     f.close()
-    return numBallots, overvotes1, undervotes1, overvotes2, undervotes2, riskLimit, num, margins, gamma
+    return simulationData, margins
+
+def dataToValues(simulationData):
+    numBallots = int(simulationData[0])
+    overvotes1 = int(simulationData[1])
+    undervotes1 = int(simulationData[2])
+    overvotes2 = int(simulationData[3])
+    undervotes2 = int(simulationData[4])
+    riskLimit = float(simulationData[5])
+    num = int(simulationData[6])
+    gamma = float(simulationData[7])
+    return numBallots, overvotes1, undervotes1, overvotes2, undervotes2, riskLimit, num, gamma
 
 def statisticsData(dataList):
     mean = round(np.mean(dataList), 2)
@@ -547,20 +530,23 @@ def statisticsData(dataList):
     variance = round(np.var(dataList), 2)
     return mean, stdev, variance
 
-
-def collectData(jsonFile, numBallots, overvotes1, undervotes1, overvotes2, undervotes2, riskLimit, num, margins, gamma, flag = 0):
+def collectData(jsonFile, simulationData, margins, flag = 0, simulationType = 2):
     '''
     Summary: Runs the simulation num number of times and averages the data. Records all data in one file: 
     Lazy_CVR_Data.csv - includes number of ballots pulled, ballots per town, number of precincts flagged for audit, etc.
     Variables contain C if they track data for comparison audits, and P if they track data for polling audits
     Flag parameter set to 0 by default to only conduct a ballot comparison audit; other options is 1 to conduct both polling and comparison audit
+    Type 1 for incremental ballot audit, type 2 for rounds
     Parameters: Data from readInput() function
     '''
+    #Simulation Data from readInput()
+    numBallots, overvotes1, undervotes1, overvotes2, undervotes2, riskLimit, num, gamma = dataToValues(simulationData)
+
     #Create CSV file and write header
     simulation = open('Lazy_CVR_Data.csv', mode = 'w', newline='')
     simulation_writer = csv.writer(simulation)
     simulation_writer.writerow(["Number of ballots", numBallots, "Overvotes", overvotes1 + overvotes2, "Undervotes", undervotes1 + undervotes2, "Number of Simulations", num, "Risk Limit", riskLimit])
-    
+
     #Run the simulation for each margin
     for run in range(0, len(margins)):
         townP, townPlist, townPdata = {}, {}, {} #Polling data: ballots per town, collection of townP (to average), average data per town
@@ -573,20 +559,28 @@ def collectData(jsonFile, numBallots, overvotes1, undervotes1, overvotes2, under
         numPolling, numComparison, countPtown, countCtown = [], [], [], [] #List of ballot polling/comparison numbers, non-zero towns for polling/comparison
         observedCSuccess = observedPSuccess = 0 #Times the risk limit was met
         margin = margins[run][0]
-        minBallots = margins[run][1]
-        maxBallots = margins[run][2]
+        #minBallots = margins[run][1]
+        #maxBallots = margins[run][2]
         
+        #Initial sample sizes; set below
+        initialCSample = numBallots
+        initalPSample = numBallots
+
         #Run the simulation num number of times
         for i in range(1, num + 1):
             print("Running Simulation #", i, "for", margin, "%")
             townPcount = townCcount = 0 #Tracks the number of towns with a ballot pulled from it
-            E1 = Election(numBallots, margin, overvotes1, undervotes1, overvotes2, undervotes2, riskLimit, gamma, jsonFile, minBallots, maxBallots) 
+            E1 = Election(numBallots, margin, overvotes1, undervotes1, overvotes2, undervotes2, riskLimit, gamma, simulationType, jsonFile) 
             #Distribute ballots between winner and runnerup
             E1._marginOfVictory() 
             E1._distributeBallots()
+            #Set up initial sample if done in rounds
+            if (simulationType == 2):
+                initialCSample = E1._comparisonSample()
+                initialPSample = E1._pollingSample() 
             #Run ballot polling audit
             if (flag == 1):
-                ballots, success = E1._ballotPolling()
+                ballots, success = E1._ballotPolling(initialPSample)
                 numPolling.append(ballots)
                 observedPSuccess += success
             else:
@@ -659,24 +653,21 @@ def collectData(jsonFile, numBallots, overvotes1, undervotes1, overvotes2, under
                 simulation_writer.writerow([town, townCdata[town][0], townCdata[town][1], townCdata[town][2], flagForCVR[town][0], flagForCVR[town][1]])
 
     simulation.close()  
-    print("Simulation complete, check Lazy_CVR_Data.csv for the simulation data.")
-        
-        
+    print("Simulation complete, check Adaptive_CVR_Data.csv for the simulation data.")
+
 def main():
     if (os.path.exists("2020_CT_Election_Data.json")):
         #Imports JSON file with election population
         inputFile = open(os.path.join(sys.path[0], "2020_CT_Election_Data.json"), "r")
         jsonFile = json.load(inputFile)
         if jsonFile is None:
-            print("Invalid Input Data: Please make sure the JSON file is in the directory!")
-            return
+            raise SyntaxError("Something is wrong with the JSON file. Please check it and try again.")
     else:
         jsonFile = None
 
     tests(jsonFile)
     
     inputFile.close()
-
 
         
 if __name__ == "__main__":

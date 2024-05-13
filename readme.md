@@ -16,14 +16,14 @@ First, install the necessary packages:
 ### Prepare Necessary Files
 
 First ensure that the necessary files are within the same directory as the primary simulation files. The files are as follows:
-	1) 2020_CT_Election_Data.json
- 	2) Election_Simulation.py
-  	3) adaptive_backend.py
-   	4) election_files.py
+1) `2020_CT_Election_Data.json`
+2) `Election_Simulation.py`
+3) `adaptive_backend.py`
+4) `election_files.py`
 
 Primary Simulation Files:
-	1) Questionable_Simulation.py
- 	2) Questionable_Input.txt
+1) `Questionable_Simulation.py`
+2) `Questionable_Input.txt`
 
 ### Run simulation
 

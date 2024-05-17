@@ -1,6 +1,6 @@
 ## Introduction
 
-**Questionable Simulation Tools** provides the function to simulate an adaptive risk-limiting audit containing ballots with marginal marks, as detailed in [The Decisive Power of Indecision: Low-Variance Risk-Limiting Audits and Election Contestation via Marginal Mark Recording](https://arxiv.org/abs/2402.06515). In the simulation, we consider and simulate the case where the probability the CVR (namely p_cvr) reports marginal ballots as votes for the winner, and the probability that the auditor(p_a) reports marginally marked ballots as votes for the winner differ. 
+**Questionable Simulation Tools** provides the function to simulate an adaptive risk-limiting audit containing ballots with marginal or ambiguous marks. In the simulation, we consider and simulate the case where the probability the CVR (namely p_cvr) reports marginal ballots as votes for the winner, and the probability that the auditor(p_a) reports marginally marked ballots as votes for the winner differ. 
 
 Here, we run this case with a margin of 1%. We run through probabilities of 0 to 100% in 10% increments for the value of p_cvr, and test auditor rates, p_a, of 20% and 40% lower and higher than current value of p_cvr. In each case, we calculate discrepancy accordingly and output the number of ballots needed for the Kaplan Markov comparison audit with the corresponding auditor and cvr probability pair. 
 

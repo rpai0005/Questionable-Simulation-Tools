@@ -317,6 +317,10 @@ class Election(object):
 def tests(jsonFile):
     '''
     Control setup/audit/simulation from terminal
+
+    Questionable Math = 0 = Baeline Approach
+                      = 1 = Bayesian Approach 
+                      = 2 = Conservative Approach
     '''
     # call readInput (needed for any audit/simulation run)
     numBallots, overvotes1, undervotes1, overvotes2, undervotes2, questionableVotes, riskLimit, num,  probqMark, gamma, margin = readInput()

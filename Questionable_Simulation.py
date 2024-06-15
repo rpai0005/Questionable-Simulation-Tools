@@ -247,17 +247,17 @@ class Election(object):
             elif (randomBallot.error == "questionable"):
                 choice = random.random()
                 qCounter+=1
-                if self.questionableMath == 0:
+                if self.questionableMath == 0:    #Baseline Approach
                     if choice <= self.qAsMark*(1-self.qAuditorRate):
                         discCounter += 1
                     elif choice >= (1-self.qAuditorRate*(1-self.qAsMark)):
                         discCounter -= 1
-                elif self.questionableMath ==1:
+                elif self.questionableMath ==1:    #Bayesian Approach  
                     if choice <= self.qAuditorRate:
                         discCounter +=1-self.qAsMark
                     else:
                         discCounter -= self.qAsMark
-                elif self.questionableMath == 2 and choice <= self.qAsMark:
+                elif self.questionableMath == 2 and choice <= self.qAsMark:    #Conservative Approach
                     discCounter -= 1
 
             # Calculates the current risk limit

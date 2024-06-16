@@ -1,6 +1,6 @@
 **This is a forked version of [Adaptive Risk Limiting Audits](https://arxiv.org/pdf/2202.02607) and [Adaptive-RLA-Tools](https://github.com/aeharrison815/Adaptive-RLA-Tools).**
 
-When running the questionable simulation with 11 simulations per margin, we are able to generate the information stored in tables 2-4. 
+When running the questionable simulation with 5000 simulations per margin, we are able to generate the information stored in tables 2-4. 
 
 ## Introduction
 **Questionable Simulation Tools** provides the function to simulate an adaptive risk-limiting audit containing ballots with marginal or ambiguous marks. In the simulation, we consider and simulate the case where the probability the CVR (namely p_cvr) reports marginal ballots as votes for the winner, and the probability that the auditor(p_a) reports marginally marked ballots as votes for the winner differ. 

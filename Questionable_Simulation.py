@@ -326,9 +326,9 @@ def tests(jsonFile):
     numBallots, overvotes1, undervotes1, overvotes2, undervotes2, questionableVotes, riskLimit, num,  probqMark, gamma, margin = readInput()
 
     print("Margin, q_CVR_Rate, q_auditor_rate QMath, Mean, stdev, median, 95%")
-    for margin in [1]:
+    for margin in [1,2,3]:
         for qMark in [1,.9,.8,.7,.6,.5,.4,.3,.2,.1,0]:
-            for auditorRate in [qMark+0.2, qMark-0.2, qMark-0.4, qMark+0.4]:
+            for auditorRate in [qMark-.4, qMark-.2, qMark, qMark+.2, qMark+0.4]:
                 if not(auditorRate < 0) and not(auditorRate > 1):
                     largeMargin = 100 * (margin / 100 + questionableVotes / numBallots * probqMark)
                     #print(str(normalOvervote1) + ", " + str(normalUndervote1) + ", " + str(qUndervote1) + ", " + str(largeMargin))

@@ -8,4 +8,3 @@ Simulations per margin=5000
 Gamma=1.1
 Margin=1.0
 QuestionableVotes=500
-ProbQMark=.5

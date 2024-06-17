@@ -323,34 +323,38 @@ def tests(jsonFile):
                       = 2 = Conservative Approach
     '''
     # call readInput (needed for any audit/simulation run)
-    numBallots, overvotes1, undervotes1, overvotes2, undervotes2, questionableVotes, riskLimit, num,  probqMark, gamma, margin = readInput()
+    numBallots, overvotes1, undervotes1, overvotes2, undervotes2, questionableVotes, riskLimit, num, gamma, margin = readInput()
 
-    print("Margin, q_CVR_Rate, q_auditor_rate QMath, Mean, stdev, median, 95%")
+    print("Margin, q_CVR_Rate, q_auditor_rate, QMath, Mean, stdev, median, 95%")
     for margin in [1,2,3]:
-        for qMark in [1,.9,.8,.7,.6,.5,.4,.3,.2,.1,0]:
-            for auditorRate in [qMark-.4, qMark-.2, qMark, qMark+.2, qMark+0.4]:
-                if not(auditorRate < 0) and not(auditorRate > 1):
-                    largeMargin = 100 * (margin / 100 + questionableVotes / numBallots * probqMark)
-                    #print(str(normalOvervote1) + ", " + str(normalUndervote1) + ", " + str(qUndervote1) + ", " + str(largeMargin))
- #                   numComparisonNormal = collectData(jsonFile, numBallots, overvotes1,undervotes1, overvotes2, undervotes2,
- #                                                   questionableVotes, riskLimit, num, gamma, largeMargin, 0, 1, 0, qMark, auditorRate)
-#                    numComparisonNormal.sort()
-#                    numComparisonQuestionableProb = collectData(jsonFile, numBallots, overvotes1, undervotes1, overvotes2, undervotes2,
- #                                                           questionableVotes, riskLimit, num, gamma, largeMargin, 0, 1, 1, qMark, auditorRate)
- #                   numComparisonQuestionableProb.sort()
-                    numComparisonQuestionable = collectData(jsonFile, numBallots, overvotes1, undervotes1, overvotes2, undervotes2,
-                                                                questionableVotes, riskLimit, num, gamma, margin, 0, 1, 2, qMark, auditorRate)
-                    numComparisonQuestionable.sort()
+        qMark=.5
+        auditorRate=.5
+        largeMargin = 100 * (margin / 100 + questionableVotes / numBallots * qMark)
+        numComparisonNormal = collectData(jsonFile, numBallots, overvotes1,undervotes1, overvotes2, undervotes2,questionableVotes, riskLimit, num, gamma, largeMargin, 0, 1, 0, qMark, auditorRate)
+        numComparisonNormal.sort()
+        numComparisonQuestionableProb = collectData(jsonFile, numBallots, overvotes1, undervotes1, overvotes2,undervotes2,questionableVotes, riskLimit, num, gamma, largeMargin, 0, 1, 1, qMark, auditorRate)
+        numComparisonQuestionableProb.sort()
+        numComparisonQuestionable = collectData(jsonFile, numBallots, overvotes1, undervotes1, overvotes2, undervotes2,questionableVotes, riskLimit, num, gamma, margin, 0, 1, 2, qMark, auditorRate)
+        numComparisonQuestionable.sort()
 
-  #                  print(str(largeMargin)+", "+str(qMark)+", "+str(auditorRate)+", "+str(0)+", "+str(np.mean(numComparisonNormal))+", "+str(np.std(numComparisonNormal))+", "
-  #                      +str(np.median(numComparisonNormal))+", "+str(numComparisonNormal[round(len(numComparisonNormal) * .95)]))
-  #                  print(str(largeMargin) + ", "+str(qMark)+", "+str(auditorRate)+", "+ str(1) + ", " + str(np.mean(numComparisonQuestionableProb)) + ", " + str(
-  #                      np.std(numComparisonQuestionableProb)) + ", "
-  #                      + str(np.median(numComparisonQuestionableProb)) + ", " + str(
-  #                      numComparisonQuestionableProb[round(len(numComparisonQuestionableProb) * .95)]))
-                    print(str(margin)+", "+str(qMark)+", "+str(auditorRate)+", "+str(2)+", "+str(np.mean(numComparisonQuestionable)) + ", " + str(np.std(numComparisonQuestionable)) + ", " + str(
-                        np.median(numComparisonQuestionable)) + ", " + str(numComparisonQuestionable[round(len(numComparisonQuestionable) * .95)]))
+        print(str(margin)+", "+str(qMark)+", "+str(auditorRate)+", "+str(0)+", "+str(np.mean(numComparisonNormal))+", "+str(np.std(numComparisonNormal))+", "+str(np.median(numComparisonNormal))+", "+str(numComparisonNormal[round(len(numComparisonNormal) * .95)]))
+        print(str(margin) + ", "+str(qMark)+", "+str(auditorRate)+", "+ str(1) + ", " + str(np.mean(numComparisonQuestionableProb)) + ", " + str(np.std(numComparisonQuestionableProb)) + ", "+ str(np.median(numComparisonQuestionableProb)) + ", " + str(numComparisonQuestionableProb[round(len(numComparisonQuestionableProb) * .95)]))
+        print(str(margin)+", "+str(qMark)+", "+str(auditorRate)+", "+str(2)+", "+str(np.mean(numComparisonQuestionable)) + ", " + str(np.std(numComparisonQuestionable)) + ", " + str(np.median(numComparisonQuestionable)) + ", " + str(numComparisonQuestionable[round(len(numComparisonQuestionable) * .95)]))
 
+    margin=1
+    for qMark in [1,.9,.8,.7,.6,.5,.4,.3,.2,.1,0]:
+        for auditorRate in [qMark-.4, qMark-.2, qMark, qMark+.2, qMark+0.4]:
+            if not(auditorRate < 0) and not(auditorRate > 1):
+                largeMargin = 100 * (margin / 100 + questionableVotes / numBallots * qMark)
+                numComparisonNormal = collectData(jsonFile, numBallots, overvotes1,undervotes1, overvotes2, undervotes2,questionableVotes, riskLimit, num, gamma, largeMargin, 0, 1, 0, qMark, auditorRate)
+                numComparisonNormal.sort()
+                numComparisonQuestionableProb = collectData(jsonFile, numBallots, overvotes1, undervotes1, overvotes2, undervotes2,questionableVotes, riskLimit, num, gamma, largeMargin, 0, 1, 1, qMark, auditorRate)
+                numComparisonQuestionableProb.sort()
+                numComparisonQuestionable = collectData(jsonFile, numBallots, overvotes1, undervotes1, overvotes2, undervotes2,questionableVotes, riskLimit, num, gamma, margin, 0, 1, 2, qMark, auditorRate)
+                numComparisonQuestionable.sort()
+                print(str(margin)+", "+str(qMark)+", "+str(auditorRate)+", "+str(0)+", "+str(np.mean(numComparisonNormal))+", "+str(np.std(numComparisonNormal))+", "+str(np.median(numComparisonNormal))+", "+str(numComparisonNormal[round(len(numComparisonNormal) * .95)]))
+                print(str(margin) + ", "+str(qMark)+", "+str(auditorRate)+", "+ str(1) + ", " + str(np.mean(numComparisonQuestionableProb)) + ", " + str(np.std(numComparisonQuestionableProb)) + ", "+ str(np.median(numComparisonQuestionableProb)) + ", " + str(numComparisonQuestionableProb[round(len(numComparisonQuestionableProb) * .95)]))
+                print(str(margin)+", "+str(qMark)+", "+str(auditorRate)+", "+str(2)+", "+str(np.mean(numComparisonQuestionable)) + ", " + str(np.std(numComparisonQuestionable)) + ", " + str(np.median(numComparisonQuestionable)) + ", " + str(numComparisonQuestionable[round(len(numComparisonQuestionable) * .95)]))
 
 def readInput():
     '''
@@ -397,15 +401,14 @@ def readInput():
     riskLimit = float(simulationData["Risk Limit"])
     num = int(simulationData["Simulations per margin"])
     questionableVotes = int(simulationData["QuestionableVotes"])
-    probQMark = float(simulationData["ProbQMark"])
     gamma = float(simulationData["Gamma"])
     margin = int(simulationData["Margin"])
     if (numBallots is None or overvotes1 is None or undervotes1 is None or overvotes2 is None or undervotes2 is None
-            or riskLimit is None or num is None or margin is None or questionableVotes is None or probQMark is None):
+            or riskLimit is None or num is None or margin is None or questionableVotes is None):
         raise ValueError("There is missing data in Simulation_Input.txt. Please check the file and try again.")
     # Close txt file and return the variables
     f.close()
-    return numBallots, overvotes1, undervotes1, overvotes2, undervotes2, questionableVotes, riskLimit, num, probQMark, gamma, margin
+    return numBallots, overvotes1, undervotes1, overvotes2, undervotes2, questionableVotes, riskLimit, num, gamma, margin
 
 
 def statisticsData(dataList):

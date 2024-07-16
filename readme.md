@@ -1,5 +1,6 @@
 **This is a forked version of [Adaptive Risk Limiting Audits](https://arxiv.org/pdf/2202.02607) and [Adaptive-RLA-Tools](https://github.com/aeharrison815/Adaptive-RLA-Tools).**
 
+**This is a companion repository to the paper [The Decisive Power of Indecision: Low-Variance Risk-Limiting Audits and Election Contestation via Marginal Mark Recording](https://arxiv.org/abs/2402.06515) which will be presented at [USENIX Security 2024](https://www.usenix.org/conference/usenixsecurity24/presentation/fuller). 
 When running the questionable simulation with 5000 simulations per margin, we are able to generate the information stored in tables 2-4. 
 
 ## Introduction

@@ -2,6 +2,8 @@
 
 **This is a companion repository to the paper [The Decisive Power of Indecision: Low-Variance Risk-Limiting Audits and Election Contestation via Marginal Mark Recording](https://arxiv.org/abs/2402.06515) which will be presented at [USENIX Security 2024](https://www.usenix.org/conference/usenixsecurity24/presentation/fuller).**
 
+Full citation is: Benjamin Fuller, Rashmi Pai and Alexander Russell "The Decisive Power of Indecision: Low-Variance Risk-Limiting Audits and Election Contestation via Marginal Mark Recording," USENIX Security 2024, Philadelphia PA.
+
 When running the questionable simulation with 5000 simulations per margin, we are able to generate the information stored in tables 2-4. 
 
 ## Introduction
